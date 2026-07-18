@@ -2,6 +2,8 @@ import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
+import userRouter from "./routes/user.routes.js"
+
 
 dotenv.config();
 
@@ -12,6 +14,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 
+app.use("/api/user",userRouter)
+
 
 mongoose
   .connect(process.env.MONGO_URL)
@@ -21,6 +25,8 @@ mongoose
 app.get("/", (req, res) => {
   res.send("API is running");
 });
+
+
 
 const PORT = process.env.PORT || 3000;
 
