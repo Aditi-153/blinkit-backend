@@ -23,8 +23,6 @@ export const userProtect = async (req, res, next) => {
 
     const user = await User.findById(decoded.id).select("-password");
 
-  
-
     if (!user) {
       return res.status(400).json({
         message: "user not found",
@@ -37,6 +35,30 @@ export const userProtect = async (req, res, next) => {
     console.log(error);
     return res.status(500).json({
       message: "failed to authorized",
+    });
+  }
+};
+
+export const adminProtect = (req, res, next) => {
+  try {
+    if (!req.user) {
+      return res.status(401).json({
+        message: "Please login first",
+      });
+    }
+
+    if (req.user.role !== "admin") {
+      return res.status(403).json({
+        message: "Access denied. Admin only",
+      });
+    }
+
+    next();
+  } catch (error) {
+    console.log(error);
+
+    return res.status(500).json({
+      message: "Authorization failed",
     });
   }
 };

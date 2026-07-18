@@ -6,7 +6,7 @@ export const userRegister = async (req, res) => {
   try {
     const { name, email, password } = req.body;
 
-    if (!name || !password) {
+    if (!name || !email || !password) {
       return res.status(400).json({
         message: "all fields required",
       });
@@ -39,8 +39,8 @@ export const userRegister = async (req, res) => {
 
     const token = jwt.sign(
       {
-        id: user._id,
-        role: user.role,
+        id: newUser._id,
+        role: newUser.role,
       },
       process.env.JWT_SECRET_KEY,
       { expiresIn: "1d" },
@@ -50,6 +50,16 @@ export const userRegister = async (req, res) => {
       httpOnly: true,
       secure: false,
       maxAge: 24 * 60 * 60 * 1000,
+    });
+
+    return res.status(201).json({
+      message: "User created successfully",
+      user: {
+        _id: newUser._id,
+        name: newUser.name,
+        email: newUser.email,
+        role: newUser.role,
+      },
     });
   } catch (error) {
     return res.status(500).json({

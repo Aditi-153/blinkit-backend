@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import userRouter from "./routes/user.routes.js"
+import itemRouter from "./routes/items.routes.js"
 
 
 dotenv.config();
@@ -15,6 +16,7 @@ app.use(cookieParser());
 
 
 app.use("/api/user",userRouter)
+app.use("/addItem", itemRouter)
 
 
 mongoose
