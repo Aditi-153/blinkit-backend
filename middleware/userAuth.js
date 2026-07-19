@@ -1,25 +1,17 @@
-import express from "express";
 import jwt from "jsonwebtoken";
 import User from "../models/userModel";
-import bcrypt from "bcrypt";
 
 export const userProtect = async (req, res, next) => {
   try {
     const token = req.cookies.token;
 
     if (!token) {
-      return res.status(400).json({
+      return res.status(401).json({
         message: "please login first",
       });
     }
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
-
-    if (!decoded) {
-      return res.status(400).json({
-        message: "invalid token",
-      });
-    }
 
     const user = await User.findById(decoded.id).select("-password");
 
@@ -40,25 +32,17 @@ export const userProtect = async (req, res, next) => {
 };
 
 export const adminProtect = (req, res, next) => {
-  try {
-    if (!req.user) {
-      return res.status(401).json({
-        message: "Please login first",
-      });
-    }
-
-    if (req.user.role !== "admin") {
-      return res.status(403).json({
-        message: "Access denied. Admin only",
-      });
-    }
-
-    next();
-  } catch (error) {
-    console.log(error);
-
-    return res.status(500).json({
-      message: "Authorization failed",
+  if (!req.user) {
+    return res.status(401).json({
+      message: "Please login first",
     });
   }
+
+  if (req.user.role !== "admin") {
+    return res.status(403).json({
+      message: "Access denied. Admin only",
+    });
+  }
+
+  next();
 };

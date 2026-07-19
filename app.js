@@ -16,7 +16,7 @@ app.use(cookieParser());
 
 
 app.use("/api/user",userRouter)
-app.use("/addItem", itemRouter)
+app.use("/api/item", itemRouter)
 
 
 mongoose
