@@ -2,9 +2,9 @@ import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
-import userRouter from "./routes/user.routes.js"
-import itemRouter from "./routes/items.routes.js"
-
+import userRouter from "./routes/user.routes.js";
+import itemRouter from "./routes/items.routes.js";
+import cartItemRouter from "./routes/items.routes.js";
 
 dotenv.config();
 
@@ -14,10 +14,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-
-app.use("/api/user",userRouter)
-app.use("/api/item", itemRouter)
-
+app.use("/api/user", userRouter);
+app.use("/api/item", itemRouter);
+app.use("/api/cartItem", cartItemRouter);
 
 mongoose
   .connect(process.env.MONGO_URL)
@@ -27,8 +26,6 @@ mongoose
 app.get("/", (req, res) => {
   res.send("API is running");
 });
-
-
 
 const PORT = process.env.PORT || 3000;
 
